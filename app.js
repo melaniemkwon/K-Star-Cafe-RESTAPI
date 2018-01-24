@@ -14,9 +14,6 @@ var leaderRouter = require('./routes/leaderRouter');
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
-const Dishes = require('./models/dishes');
-const Promotions = require('./models/promotions');
-
 const url = 'mongodb://localhost:27017/conFusion';
 const connect = mongoose.connect(url, {
   useMongoClient: true
@@ -40,6 +37,35 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Basic Authentication
+function auth(req, res, next) {
+  console.log(req.headers);
+
+  var authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    var err = new Error('You are not authenticated!');
+    res.setHeader('WWW-Authenticate', 'Basic');
+    err.status = 401;
+    return next(err);
+  }
+
+  var auth = new Buffer(authHeader.split(' ')[1], 'base64').toString().split(':');
+  var username = auth[0];
+  var password = auth[1];
+
+  if (username === 'admin' && password === 'password') {
+    next(); // allow to pass through to next middleware
+  }  else {
+    var err = new Error('You are not authenticated!');
+    res.setHeader('WWW-Authenticate', 'Basic');
+    err.status = 401;
+    return next(err);
+  }
+}
+app.use(auth);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
