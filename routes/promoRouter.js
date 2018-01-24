@@ -19,7 +19,6 @@ promoRouter.route('/')
     .catch((err) => next(err));
 })
 .post((req,res,next) => {
-    console.log(req.body)
     Promotions.create(req.body)
     .then((promotion) => {
         console.log('Promotion Created ', promotion);

@@ -31,11 +31,6 @@ const promotionSchema = new Schema({
         required: true
     }
 },{
-/*
-.push() of mongoose maps to a "$pushAll" command of MongoDB is now deprecated.
-To work around this you have to add a "{ usePushEach:true }" entry to schema.
-*/
-    // usePushEach: true,
     timestamps: true
 });
 
