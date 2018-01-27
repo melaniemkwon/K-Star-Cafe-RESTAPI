@@ -8,8 +8,15 @@ var router = express.Router();
 router.use(bodyParser.json());
 
 /* GET users listing. */
-router.get('/', (req, res, next) => {
-  res.send('respond with a resource');
+router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  User.find({}, (err, users) => {
+    if(err) {
+      res.statusCode = 403;
+      res.setHeader('Content-Type', 'application/json');
+      res.json({err: err});
+    }
+    res.json(users);
+  });
 });
 
 router.post('/signup', (req, res, next) => {
