@@ -173,7 +173,7 @@ dishRouter.route('/:dishId/comments/:commentId')
   res.statusCode = 403;
   res.end('POST operation not supported on /dishes/'+ req.params.dishId + '/comments/' + req.params.commentId);
 })
-.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Dishes.findById(req.params.dishId)
     .then((dish) => {
         if (dish != null && dish.comments.id(req.params.commentId) != null) {

@@ -16,14 +16,13 @@ var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
 var uploadRouter = require('./routes/uploadRouter');
+var favoriteRouter = require('./routes/favoriteRouter');
 
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
 const url = config.mongoUrl;
-const connect = mongoose.connect(url, {
-  useMongoClient: true
-});
+const connect = mongoose.connect(url);
 
 connect.then((db) => {
   console.log('Connected correctly to the server.');
@@ -62,6 +61,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/dishes', dishRouter);
 app.use('/promotions', promoRouter);
 app.use('/leaders', leaderRouter);
+app.use('/favorites', favoriteRouter);
 app.use('/imageUpload', uploadRouter);
 
 // catch 404 and forward to error handler
